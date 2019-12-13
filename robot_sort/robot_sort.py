@@ -9,6 +9,9 @@ class SortingRobot:
         self._light = "OFF"     # The state of the robot's light
         self._time = 0          # A time counter (stretch)
 
+    def __str__(self):
+        return f"List: {self._list}\nItem: {self._item}\nPosition: {self._position}\n Light: {self._light}"
+
     def can_move_right(self):
         """
         Returns True if the robot can move right or False if it's
@@ -32,7 +35,7 @@ class SortingRobot:
         self._time += 1
         if self._position < len(self._list) - 1:
             self._position += 1
-            return True
+            return 
         else:
             return False
 
@@ -96,8 +99,26 @@ class SortingRobot:
         """
         Sort the robot's list.
         """
-        # Fill this out
-        pass
+        while True:
+            self.set_light_off()
+            while self.can_move_right():
+                self.swap_item() #picks up item
+                self.move_right() 
+                #print("1SELF", self)
+                if self.compare_item()==1: # if next list element is smaller than the item, pick up element, light on means swap occurred.
+                    self.swap_item()
+                    self.set_light_on()
+                    #print("2SELF", self)
+                self.move_left() #go back to previous position
+                self.swap_item() #put small item down
+                self.move_right() #move to next position
+            if self.light_is_on()==False: # if the light is off, no swaps happened, so list is sorted
+                return
+            while self.can_move_left():
+                self.move_left() # takes you back to beginning of list
+            self.set_light_off()
+
+
 
 
 if __name__ == "__main__":
